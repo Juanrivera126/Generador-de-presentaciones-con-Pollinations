@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Presentaciones con IA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #4cc9f0;
+            --success: #2a9d8f;
+            --dark: #1a1a2e;
+            --darker: #16213e;
+            --text: #f8f9fa;
+            --light-gray: #e9ecef;
+            --card-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--dark), var(--darker));
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1s ease-out;
+        }
+
+        /* Styles for Top Settings Bar */
+        .global-settings {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .setting-item {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #a9d6e5;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .app-container {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .form-container {
+            flex: 1;
+            min-width: 300px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        .preview-container {
+            flex: 2;
+            min-width: 300px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            animation: slideInRight 0.8s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--accent);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text);
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.3);
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.2em;
+        }
+
+        /* Fix for long dropdown options */
+        select option {
+            background-color: var(--darker);
+            color: var(--text);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+            width: 100%;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-download {
+            background: linear-gradient(45deg, var(--success), #1d3557);
+            margin-top: 20px;
+            display: none;
+            animation: fadeIn 1s;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .spinner {
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 5px solid var(--accent);
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .slide-preview {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .slide-preview:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .slide-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .slide-number {
+            background: var(--primary);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .slide-content {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .slide-content.vertical {
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .slide-content.vertical .slide-text,
+        .slide-content.vertical .slide-image {
+            flex: none;
+            min-width: auto;
+            width: 100%;
+        }
+
+        .slide-content.vertical .slide-image img {
+            max-height: 200px;
+            width: auto;
+            max-width: 100%;
+        }
+
+        .slide-text {
+            flex: 1;
+            min-width: 250px;
+            font-size: 1.1rem;
+            color: var(--light-gray);
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            line-height: 1.7;
+        }
+
+        .slide-image {
+            flex: 1;
+            min-width: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .slide-image img {
+            width: 100%;
+            max-height: 280px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .image-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .image-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .custom-prompt-input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.4);
+            color: var(--text);
+            font-size: 1rem;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+        }
+
+        .custom-prompt-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .custom-prompt-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.3);
+        }
+
+        .image-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+        }
+
+        .regenerate-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .approve-btn {
+            background: var(--success);
+            color: white;
+        }
+
+        .image-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .image-btn:active {
+            transform: translateY(0);
+        }
+
+        .slide-approved {
+            background: rgba(42, 157, 143, 0.2);
+            border-color: rgba(42, 157, 143, 0.4);
+        }
+
+        .slide-approved .image-controls {
+            display: none;
+        }
+
+        .slide-approved .slide-title {
+            color: var(--success);
+        }
+
+        .preview-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-right: 10px;
+            max-height: 70vh;
+        }
+
+        .instruction {
+            background: rgba(67, 97, 238, 0.2);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 20px;
+            border: 1px solid rgba(76, 201, 240, 0.3);
+        }
+
+        .instruction p {
+            margin-bottom: 15px;
+            color: var(--light-gray);
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .instruction i {
+            color: var(--accent);
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            color: var(--light-gray);
+            font-size: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            padding: 18px 30px;
+            border-radius: 12px;
+            background: var(--success);
+            color: white;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transform: translateX(200%);
+            transition: transform 0.4s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.1rem;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            background: #e63946;
+        }
+
+        .notification i {
+            font-size: 1.5rem;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+
+            .global-settings {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            h1 {
+                font-size: 2.3rem;
+            }
+
+            .section-title {
+                font-size: 1.4rem;
+            }
+
+            .image-buttons {
+                flex-direction: column;
+            }
+
+            .image-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1 id="appTitle"><i class="fas fa-magic"></i> Generador de Presentaciones con IA</h1>
+            <p class="subtitle" id="appSubtitle">Crea presentaciones únicas con contenido generado por inteligencia artificial y efectos visuales</p>
+        </header>
+
+        <!-- Global Settings Bar -->
+        <div class="global-settings">
+            <div class="setting-item form-group" style="margin-bottom: 0;">
+                <label for="apiKeyInput"><i class="fas fa-key"></i> API Key</label>
+                <input type="password" id="apiKeyInput" placeholder="plln_sk_..." value="">
+            </div>
+            
+            <div class="setting-item form-group" style="margin-bottom: 0;">
+                <label for="llmSelect" id="labelLLM"><i class="fas fa-brain"></i> Modelo de Lenguaje / LLM</label>
+                <select id="llmSelect">
+                    <option value="gemini-search" selected>Gemini 3 Flash (Search)</option>
+                    <option value="gemini-fast">Gemini 2.5 Flash</option>
+                    <option value="openai-fast">GPT-5 Nano</option>
+                    <option value="grok">Grok 4 Fast</option>
+                    <option value="perplexity-fast">Perplexity Sonar</option>
+                    <option value="claude-fast">Claude 4.5 Haiku</option>
+                    <option value="kimi-k2-thinking">kimi k2</option>
+                    <option value="claude">Claude 4.5 Sonnet</option>
+                    <option value="deepseek">Deepseek V3.2</option>
+                </select>
+            </div>
+
+            <div class="setting-item form-group" style="margin-bottom: 0;">
+                <label for="languageSelect"><i class="fas fa-language"></i> Idioma / Language</label>
+                <select id="languageSelect">
+                    <option value="es">Español</option>
+                    <option value="en">English</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="app-container">
+            <div class="form-container">
+                <h2 class="section-title" id="configTitle"><i class="fas fa-cog"></i> Configuración</h2>
+                <div class="form-group">
+                    <label for="topic" id="labelTopic"><i class="fas fa-book"></i> Tema de la presentación</label>
+                    <input type="text" id="topic" placeholder="Ej: Historia del cine, Exploración espacial, Arte moderno...">
+                </div>
+
+                <div class="form-group">
+                    <label for="style" id="labelStyle"><i class="fas fa-palette"></i> Estilo artístico</label>
+                    <select id="style">
+                        <!-- Options will be populated by JS -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="imageModel" id="labelModel"><i class="fas fa-image"></i> Modelo de imagen</label>
+                    <select id="imageModel">
+                        <option value="flux" selected>Flux</option>
+						<option value="zimage">Z Image</option>
+						<option value="kontext">Kontext</option>
+						<option value="nanobanana">Nano banana</option>
+						<option value="seedream">Seedream</option>
+						<option value="gptimage">GPT Imagen 1</option>
+						<option value="gptimage-large">GPT Image 1.5</option>
+						
+						<option value="nanobanana-pro">Nano banana Pro</option>
+						<option value="seedream-pro">Seedream Pro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="aspectRatio" id="labelRatio"><i class="fas fa-expand-arrows-alt"></i> Relación de aspecto</label>
+                    <select id="aspectRatio">
+                        <option value="horizontal" id="optHorizontal">Horizontal</option>
+                        <option value="vertical" id="optVertical">Vertical</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="slideCount" id="labelSlideCount"><i class="fas fa-sliders-h"></i> Número de diapositivas (3-20)</label>
+                    <input type="number" id="slideCount" min="3" max="20" value="5">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="slideProgress"></div>
+                    </div>
+                </div>
+
+                <button id="generateBtn" class="btn">
+                    <i class="fas fa-bolt"></i> <span id="btnGenerate">Generar Presentación</span>
+                </button>
+
+                <button id="downloadBtn" class="btn btn-download">
+                    <i class="fas fa-file-download"></i> <span id="btnDownload">Descargar Presentación</span>
+                </button>
+            </div>
+
+            <div class="preview-container">
+                <h2 class="section-title" id="previewTitle"><i class="fas fa-eye"></i> Previsualización</h2>
+                <div class="preview-content" id="previewContent">
+                    <div class="instruction">
+                        <p id="instr1"><i class="fas fa-info-circle"></i> Configura tu presentación a la izquierda y haz clic en "Generar Presentación" para comenzar.</p>
+                        <p id="instr2"><i class="fas fa-sync-alt"></i> Una vez generadas las imágenes, podrás regenerar cada una hasta que estés satisfecho, o introducir un nuevo prompt para cambiarla.</p>
+                        <p id="instr3"><i class="fas fa-check-circle"></i> Puedes descargar la presentación inmediatamente, o aprobar las imágenes una por una para fijarlas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p id="footerText"><i class="fas fa-robot"></i> Diseñado por Juan Guillermo Rivera Berrío con tecnología Deepseek</p>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span>¡Presentación generada con éxito!</span>
+    </div>
+
+    <script>
+        // Diccionario de Traducciones
+        const translations = {
+            es: {
+                appTitle: "Generador de Presentaciones con IA",
+                appSubtitle: "Crea presentaciones únicas con contenido generado por inteligencia artificial y efectos visuales",
+                configTitle: "Configuración",
+                labelTopic: "Tema de la presentación",
+                topicPlaceholder: "Ej: Historia del cine, Exploración espacial, Arte moderno...",
+                labelStyle: "Estilo artístico",
+                labelModel: "Modelo de imagen",
+                labelLLM: "Modelo de Lenguaje / LLM",
+                labelRatio: "Relación de aspecto",
+                optHorizontal: "Horizontal",
+                optVertical: "Vertical",
+                labelSlideCount: "Número de diapositivas (3-20)",
+                btnGenerate: "Generar Presentación",
+                btnDownload: "Descargar Presentación",
+                previewTitle: "Previsualización",
+                instr1: "Configura tu presentación a la izquierda y haz clic en \"Generar Presentación\" para comenzar.",
+                instr2: "Una vez generadas las imágenes, podrás regenerar cada una hasta que estés satisfecho, o introducir un nuevo prompt para cambiarla.",
+                instr3: "Puedes descargar la presentación inmediatamente, o aprobar las imágenes una por una para fijarlas.",
+                footerText: "Diseñado por Juan Guillermo Rivera Berrío con tecnología Deepseek",
+                notificationSuccess: "¡Presentación generada con éxito!",
+                notificationError: "Error al generar el contenido. Intenta nuevamente.",
+                notificationMissingTopic: "Por favor ingresa un tema para la presentación",
+                notificationMissingKey: "Por favor ingresa tu API Key",
+                notificationCountError: "El número de diapositivas debe estar entre 3 y 20",
+                notificationImgApproved: "Imagen aprobada",
+                notificationImgRegenerated: "Imagen regenerada",
+                notificationAllApproved: "¡Todas las imágenes aprobadas!",
+                notificationDownloadSuccess: "¡Presentación descargada con éxito!",
+                slideLabel: "Diapositiva",
+                approvedLabel: "Imagen aprobada",
+                regenerateBtn: "Regenerar",
+                approveBtn: "Aprobar",
+                promptPlaceholder: "Nuevo prompt para la imagen (opcional)",
+                loadingText: "Generando contenido para",
+                loadingWait: "Por favor espera, esto puede tomar unos segundos.",
+                processingImages: "Procesando imágenes y generando archivo...",
+                errorGen: "Hubo un error al generar la presentación.",
+                errorConn: "Por favor, verifica tu API Key y conexión a internet e intenta nuevamente.",
+                styles: {
+                    realism: "Realismo", impressionism: "Impresionismo", cubism: "Cubismo", surrealism: "Surrealismo",
+                    abstract: "Arte abstracto", popart: "Pop Art", renaissance: "Renacimiento", baroque: "Barroco",
+                    romanticism: "Romanticismo", artnouveau: "Art Nouveau", futurism: "Futurismo", expressionism: "Expresionismo",
+                    minimalism: "Minimalism", photorealism: "Fotorrealismo", digital: "Arte digital", anime: "Anime",
+                    watercolor: "Acuarela", oilpainting: "Pintura al óleo", pencilsketch: "Dibujo a lápiz", vector: "Vector",
+                    render3d: "Render 3D", cartoon3d: "Cartoon 3D", disney: "Estilo Disney", pixar: "Estilo Pixar", illustration: "Ilustración"
+                },
+                aiSystemPrompt: "Eres un experto en presentaciones. Tu objetivo es desglosar un tema en subtemas específicos y distintos para cada diapositiva. Evita generalidades. Formato: Título: [título corto] Descripción: [descripción concisa]",
+                aiUserPromptBase: "Tema:",
+                aiUserPromptStructure: "Estructura requerida:",
+                avoidRepetition: "IMPORTANTE: NO repitas ni hables de los siguientes temas ya generados:",
+                slideTypeIntro: "Introducción general al tema.",
+                slideTypeSpecific: "IMPORTANTE: Elige UN SOLO ejemplo, subtema o caso específico y distinto que NO se haya mencionado. NO hagas un resumen general.",
+                slideTypeConclusion: "Conclusión resumen y cierre.",
+                aiUserPromptFormat: "Título máximo 6 palabras, descripción máximo 25 palabras. Responder EN ESPAÑOL.",
+                downloadNext: "Siguiente",
+                downloadPrev: "Anterior"
+            },
+            en: {
+                appTitle: "AI Presentation Generator",
+                appSubtitle: "Create unique presentations with AI-generated content and visual effects",
+                configTitle: "Configuration",
+                labelTopic: "Presentation Topic",
+                topicPlaceholder: "Ex: History of Cinema, Space Exploration, Modern Art...",
+                labelStyle: "Artistic Style",
+                labelModel: "Image Model",
+                labelLLM: "Language Model / LLM",
+                labelRatio: "Aspect Ratio",
+                optHorizontal: "Horizontal",
+                optVertical: "Vertical",
+                labelSlideCount: "Number of Slides (3-20)",
+                btnGenerate: "Generate Presentation",
+                btnDownload: "Download Presentation",
+                previewTitle: "Preview",
+                instr1: "Configure your presentation on the left and click \"Generate Presentation\" to start.",
+                instr2: "Once images are generated, you can regenerate each one until satisfied, or enter a new prompt to change it.",
+                instr3: "You can download the presentation immediately, or approve images individually to lock them.",
+                footerText: "Designed by Juan Guillermo Rivera Berrío with Deepseek technology",
+                notificationSuccess: "Presentation generated successfully!",
+                notificationError: "Error generating content. Please try again.",
+                notificationMissingTopic: "Please enter a topic for the presentation",
+                notificationMissingKey: "Please enter your API Key",
+                notificationCountError: "Slide count must be between 3 and 20",
+                notificationImgApproved: "Image approved",
+                notificationImgRegenerated: "Image regenerated",
+                notificationAllApproved: "All images approved!",
+                notificationDownloadSuccess: "Presentation downloaded successfully!",
+                slideLabel: "Slide",
+                approvedLabel: "Image approved",
+                regenerateBtn: "Regenerate",
+                approveBtn: "Approve",
+                promptPlaceholder: "New prompt for image (optional)",
+                loadingText: "Generating content for",
+                loadingWait: "Please wait, this may take a few seconds.",
+                processingImages: "Processing images and generating file...",
+                errorGen: "There was an error generating the presentation.",
+                errorConn: "Please check your API Key and internet connection and try again.",
+                styles: {
+                    realism: "Realism", impressionism: "Impressionism", cubism: "Cubism", surrealism: "Surrealism",
+                    abstract: "Abstract Art", popart: "Pop Art", renaissance: "Renaissance", baroque: "Baroque",
+                    romanticism: "Romanticism", artnouveau: "Art Nouveau", futurism: "Futurism", expressionism: "Expressionism",
+                    minimalism: "Minimalism", photorealism: "Photorealism", digital: "Digital Art", anime: "Anime",
+                    watercolor: "Watercolor", oilpainting: "Oil Painting", pencilsketch: "Pencil Sketch", vector: "Vector",
+                    render3d: "3D Render", cartoon3d: "3D Cartoon", disney: "Disney Style", pixar: "Pixar Style", illustration: "Illustration"
+                },
+                aiSystemPrompt: "You are a presentation expert. Your goal is to break down a topic into specific, distinct subtopics for each slide. Avoid generalities. Format: Title: [short title] Description: [concise description]",
+                aiUserPromptBase: "Topic:",
+                aiUserPromptStructure: "Required structure:",
+                avoidRepetition: "IMPORTANT: DO NOT repeat or discuss the following topics already generated:",
+                slideTypeIntro: "General introduction to the topic.",
+                slideTypeSpecific: "IMPORTANT: Choose ONE specific example, subtopic, or distinct case that has NOT been mentioned. DO NOT make a general summary.",
+                slideTypeConclusion: "Conclusion and summary.",
+                aiUserPromptFormat: "Title max 6 words, description max 25 words. Respond IN ENGLISH.",
+                downloadNext: "Next",
+                downloadPrev: "Previous"
+            },
+            fr: {
+                appTitle: "Générateur de Présentations IA",
+                appSubtitle: "Créez des présentations uniques avec du contenu généré par l'IA et des effets visuels",
+                configTitle: "Configuration",
+                labelTopic: "Sujet de la présentation",
+                topicPlaceholder: "Ex: Histoire du cinéma, Exploration spatiale, Art moderne...",
+                labelStyle: "Style artistique",
+                labelModel: "Modèle d'image",
+                labelLLM: "Modèle de Langage / LLM",
+                labelRatio: "Format",
+                optHorizontal: "Horizontal",
+                optVertical: "Vertical",
+                labelSlideCount: "Nombre de diapositives (3-20)",
+                btnGenerate: "Générer la Présentation",
+                btnDownload: "Télécharger la Présentation",
+                previewTitle: "Aperçu",
+                instr1: "Configurez votre présentation à gauche et cliquez sur \"Générer la Présentation\" pour commencer.",
+                instr2: "Une fois les images générées, vous pouvez régénérer chacune d'elles jusqu'à satisfaction, ou saisir un nouveau prompt.",
+                instr3: "Vous pouvez télécharger la présentation immédiatement ou approuver les images.",
+                footerText: "Conçu par Juan Guillermo Rivera Berrío avec la technologie Deepseek",
+                notificationSuccess: "Présentation générée avec succès !",
+                notificationError: "Erreur lors de la génération du contenu. Veuillez réessayer.",
+                notificationMissingTopic: "Veuillez entrer un sujet pour la présentation",
+                notificationMissingKey: "Veuillez entrer votre clé API",
+                notificationCountError: "Le nombre de diapositives doit être compris entre 3 et 20",
+                notificationImgApproved: "Image approuvée",
+                notificationImgRegenerated: "Image régénérée",
+                notificationAllApproved: "Toutes les images approuvées !",
+                notificationDownloadSuccess: "Présentation téléchargée avec succès !",
+                slideLabel: "Diapositive",
+                approvedLabel: "Image approuvée",
+                regenerateBtn: "Régénérer",
+                approveBtn: "Approuver",
+                promptPlaceholder: "Nouveau prompt pour l'image (optionnel)",
+                loadingText: "Génération de contenu pour",
+                loadingWait: "Veuillez patienter, cela peut prendre quelques secondes.",
+                processingImages: "Traitement des images et génération du fichier...",
+                errorGen: "Une erreur s'est produite lors de la génération.",
+                errorConn: "Veuillez vérifier votre clé API et votre connexion internet, puis réessayez.",
+                styles: {
+                    realism: "Réalisme", impressionism: "Impressionnisme", cubism: "Cubisme", surrealism: "Surréalisme",
+                    abstract: "Art abstrait", popart: "Pop Art", renaissance: "Renaissance", baroque: "Baroque",
+                    romanticism: "Romantisme", artnouveau: "Art Nouveau", futurism: "Futurisme", expressionism: "Expressionnisme",
+                    minimalism: "Minimalisme", photorealism: "Photoréalisme", digital: "Art numérique", anime: "Anime",
+                    watercolor: "Aquarelle", oilpainting: "Peinture à l'huile", pencilsketch: "Croquis au crayon", vector: "Vecteur",
+                    render3d: "Rendu 3D", cartoon3d: "Dessin animé 3D", disney: "Style Disney", pixar: "Style Pixar", illustration: "Illustration"
+                },
+                aiSystemPrompt: "Vous êtes un expert en présentations. Votre objectif est de décomposer un sujet en sous-thèmes spécifiques et distincts. Évitez les généralités. Format: Titre: ... Description: ...",
+                aiUserPromptBase: "Sujet:",
+                aiUserPromptStructure: "Structure requise:",
+                avoidRepetition: "IMPORTANT : NE PAS répéter les sujets suivants déjà générés :",
+                slideTypeIntro: "Introduction générale au sujet.",
+                slideTypeSpecific: "IMPORTANT : Choisissez UN SEUL exemple spécifique, sous-thème ou cas distinct NON mentionné. NE faites PAS de résumé général.",
+                slideTypeConclusion: "Conclusion et résumé.",
+                aiUserPromptFormat: "Titre max 6 mots, description max 25 mots. Répondre EN FRANÇAIS.",
+                downloadNext: "Suivant",
+                downloadPrev: "Précédent"
+            },
+            de: {
+                appTitle: "KI-Präsentationsgenerator",
+                appSubtitle: "Erstellen Sie einzigartige Präsentationen mit KI-generierten Inhalten und visuellen Effekten",
+                configTitle: "Konfiguration",
+                labelTopic: "Präsentationsthema",
+                topicPlaceholder: "Bsp: Filmgeschichte, Weltraumforschung, Moderne Kunst...",
+                labelStyle: "Künstlerischer Stil",
+                labelModel: "Bildmodell",
+                labelLLM: "Sprachmodell / LLM",
+                labelRatio: "Seitenverhältnis",
+                optHorizontal: "Horizontal",
+                optVertical: "Vertikal",
+                labelSlideCount: "Anzahl der Folien (3-20)",
+                btnGenerate: "Präsentation erstellen",
+                btnDownload: "Präsentation herunterladen",
+                previewTitle: "Vorschau",
+                instr1: "Konfigurieren Sie Ihre Präsentation links und klicken Sie auf \"Präsentation erstellen\", um zu beginnen.",
+                instr2: "Sobald Bilder generiert sind, können Sie diese regenerieren oder einen neuen Prompt eingeben.",
+                instr3: "Sie können die Präsentation sofort herunterladen oder Bilder genehmigen.",
+                footerText: "Entworfen von Juan Guillermo Rivera Berrío mit Deepseek-Technologie",
+                notificationSuccess: "Präsentation erfolgreich erstellt!",
+                notificationError: "Fehler beim Erstellen des Inhalts. Bitte versuchen Sie es erneut.",
+                notificationMissingTopic: "Bitte geben Sie ein Thema für die Präsentation ein",
+                notificationMissingKey: "Bitte geben Sie Ihren API-Schlüssel ein",
+                notificationCountError: "Die Anzahl der Folien muss zwischen 3 und 20 liegen",
+                notificationImgApproved: "Bild genehmigt",
+                notificationImgRegenerated: "Bild regeneriert",
+                notificationAllApproved: "Alle Bilder genehmigt!",
+                notificationDownloadSuccess: "Präsentation erfolgreich heruntergeladen!",
+                slideLabel: "Folie",
+                approvedLabel: "Bild genehmigt",
+                regenerateBtn: "Regenerieren",
+                approveBtn: "Genehmigen",
+                promptPlaceholder: "Neuer Prompt für Bild (optional)",
+                loadingText: "Erstelle Inhalt für",
+                loadingWait: "Bitte warten Sie, dies kann einige Sekunden dauern.",
+                processingImages: "Bilder werden verarbeitet und Datei erstellt...",
+                errorGen: "Es gab einen Fehler bei der Erstellung der Präsentation.",
+                errorConn: "Bitte überprüfen Sie Ihren API-Schlüssel und Ihre Internetverbindung und versuchen Sie es erneut.",
+                styles: {
+                    realism: "Realismus", impressionism: "Impressionismus", cubism: "Kubismus", surrealism: "Surrealismus",
+                    abstract: "Abstrakte Kunst", popart: "Pop Art", renaissance: "Renaissance", baroque: "Barock",
+                    romanticism: "Romantik", artnouveau: "Jugendstil", futurism: "Futurismus", expressionism: "Expressionismus",
+                    minimalism: "Minimalismus", photorealism: "Fotorealismus", digital: "Digitale Kunst", anime: "Anime",
+                    watercolor: "Aquarell", oilpainting: "Ölgemälde", pencilsketch: "Bleistiftzeichnung", vector: "Vektor",
+                    render3d: "3D-Render", cartoon3d: "3D-Cartoon", disney: "Disney-Stil", pixar: "Pixar-Stil", illustration: "Illustration"
+                },
+                aiSystemPrompt: "Sie sind ein Präsentationsexperte. Ziel ist es, ein Thema in spezifische Unterthemen zu zerlegen. Vermeiden Sie Allgemeinplätze. Format: Titel: ... Beschreibung: ...",
+                aiUserPromptBase: "Thema:",
+                aiUserPromptStructure: "Erforderliche Struktur:",
+                avoidRepetition: "WICHTIG: Wiederholen Sie NICHT die folgenden bereits generierten Themen:",
+                slideTypeIntro: "Allgemeine Einführung in das Thema.",
+                slideTypeSpecific: "WICHTIG: Wählen Sie EIN spezifisches Beispiel oder Unterthema, das noch NICHT erwähnt wurde. KEINE allgemeine Zusammenfassung.",
+                slideTypeConclusion: "Fazit und Zusammenfassung.",
+                aiUserPromptFormat: "Titel max. 6 Wörter, Beschreibung max. 25 Wörter. Antworte AUF DEUTSCH.",
+                downloadNext: "Weiter",
+                downloadPrev: "Zurück"
+            }
+        };
+
+        // Variable global para idioma actual
+        let currentLang = 'es';
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Elementos DOM
+            const apiKeyInput = document.getElementById('apiKeyInput');
+            const languageSelect = document.getElementById('languageSelect');
+            const llmSelect = document.getElementById('llmSelect');
+            const topicInput = document.getElementById('topic');
+            const styleSelect = document.getElementById('style');
+            const imageModelSelect = document.getElementById('imageModel');
+            const aspectRatioSelect = document.getElementById('aspectRatio');
+            const slideCountInput = document.getElementById('slideCount');
+            const slideProgress = document.getElementById('slideProgress');
+            const generateBtn = document.getElementById('generateBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const previewContent = document.getElementById('previewContent');
+            const notification = document.getElementById('notification');
+
+            // Cambio de idioma
+            languageSelect.addEventListener('change', function() {
+                currentLang = this.value;
+                document.documentElement.lang = currentLang;
+                updateInterfaceLanguage();
+            });
+
+            // Función para actualizar toda la interfaz
+            function updateInterfaceLanguage() {
+                const t = translations[currentLang];
+                
+                // Actualizar textos directos por ID
+                document.getElementById('appTitle').innerHTML = '<i class="fas fa-magic"></i> ' + t.appTitle;
+                document.getElementById('appSubtitle').textContent = t.appSubtitle;
+                document.getElementById('configTitle').innerHTML = '<i class="fas fa-cog"></i> ' + t.configTitle;
+                document.getElementById('labelTopic').innerHTML = '<i class="fas fa-book"></i> ' + t.labelTopic;
+                document.getElementById('topic').placeholder = t.topicPlaceholder;
+                document.getElementById('labelStyle').innerHTML = '<i class="fas fa-palette"></i> ' + t.labelStyle;
+                document.getElementById('labelModel').innerHTML = '<i class="fas fa-image"></i> ' + t.labelModel;
+                document.getElementById('labelLLM').innerHTML = '<i class="fas fa-brain"></i> ' + t.labelLLM;
+                document.getElementById('labelRatio').innerHTML = '<i class="fas fa-expand-arrows-alt"></i> ' + t.labelRatio;
+                document.getElementById('optHorizontal').textContent = t.optHorizontal;
+                document.getElementById('optVertical').textContent = t.optVertical;
+                document.getElementById('labelSlideCount').innerHTML = '<i class="fas fa-sliders-h"></i> ' + t.labelSlideCount;
+                document.getElementById('btnGenerate').textContent = t.btnGenerate;
+                document.getElementById('btnDownload').textContent = t.btnDownload;
+                document.getElementById('previewTitle').innerHTML = '<i class="fas fa-eye"></i> ' + t.previewTitle;
+                document.getElementById('footerText').innerHTML = '<i class="fas fa-robot"></i> ' + t.footerText;
+
+                // Actualizar instrucciones
+                if (document.getElementById('instr1')) {
+                    document.getElementById('instr1').innerHTML = '<i class="fas fa-info-circle"></i> ' + t.instr1;
+                    document.getElementById('instr2').innerHTML = '<i class="fas fa-sync-alt"></i> ' + t.instr2;
+                    document.getElementById('instr3').innerHTML = '<i class="fas fa-check-circle"></i> ' + t.instr3;
+                }
+
+                // Repoblar selector de estilos preservando la selección actual
+                const currentStyle = styleSelect.value || 'realism';
+                styleSelect.innerHTML = '';
+                
+                const styleKeys = Object.keys(translations.es.styles);
+                styleKeys.forEach(key => {
+                    const option = document.createElement('option');
+                    option.value = key;
+                    option.textContent = t.styles[key];
+                    if (key === currentStyle) option.selected = true;
+                    styleSelect.appendChild(option);
+                });
+            }
+
+            // Inicializar idioma
+            updateInterfaceLanguage();
+
+            // Actualizar barra de progreso
+            slideCountInput.addEventListener('input', function () {
+                const value = parseInt(this.value);
+                const min = parseInt(this.min);
+                const max = parseInt(this.max);
+                const percent = ((value - min) / (max - min)) * 100;
+                slideProgress.style.width = percent + '%';
+            });
+
+            // Inicializar barra de progreso
+            slideCountInput.dispatchEvent(new Event('input'));
+
+            // Datos de la presentación
+            let presentationData = {
+                topic: '',
+                style: '',
+                imageModel: 'flux',
+                aspectRatio: 'horizontal',
+                slideCount: 5,
+                slides: [],
+                approvedCount: 0,
+                lang: 'es'
+            };
+
+            // Mostrar notificación
+            function showNotification(message, isError = false) {
+                notification.innerHTML = '<i class="' + (isError ? 'fas fa-exclamation-triangle' : 'fas fa-check-circle') + '"></i><span>' + message + '</span>';
+                notification.classList.remove('error');
+                if (isError) notification.classList.add('error');
+                notification.classList.add('show');
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+
+            // Generar presentación
+            generateBtn.addEventListener('click', async function () {
+                const apiKey = apiKeyInput.value.trim();
+                const topic = topicInput.value.trim();
+                const style = styleSelect.value;
+                const imageModel = imageModelSelect.value;
+                const aspectRatio = aspectRatioSelect.value;
+                const slideCount = parseInt(slideCountInput.value);
+                const t = translations[currentLang];
+
+                // Ocultar botón de descarga al iniciar nueva generación
+                downloadBtn.style.display = 'none';
+
+                if (!apiKey) {
+                    showNotification(t.notificationMissingKey, true);
+                    return;
+                }
+
+                if (!topic) {
+                    showNotification(t.notificationMissingTopic, true);
+                    return;
+                }
+
+                if (slideCount < 3 || slideCount > 20) {
+                    showNotification(t.notificationCountError, true);
+                    return;
+                }
+
+                // Actualizar datos
+                presentationData = {
+                    topic,
+                    style,
+                    imageModel,
+                    aspectRatio,
+                    slideCount,
+                    slides: [],
+                    approvedCount: 0,
+                    lang: currentLang
+                };
+
+                // Mostrar estado de carga
+                const styleName = t.styles[style];
+                previewContent.innerHTML = `<div class="loading"><div class="spinner"></div><p>${t.loadingText} "${topic}" (${styleName})...</p><p>${t.loadingWait}</p></div>`;
+
+                // Generar contenido con IA
+                try {
+                    await generatePresentationContent(apiKey);
+                    showNotification(t.notificationSuccess);
+                } catch (error) {
+                    console.error('Error generando contenido:', error);
+                    showNotification(t.notificationError, true);
+                    previewContent.innerHTML = `<div class="instruction"><p><i class="fas fa-exclamation-triangle"></i> ${t.errorGen}</p><p>${t.errorConn}</p></div>`;
+                }
+            });
+
+            // Validar y truncar contenido para diapositivas
+            function validateAndTruncateContent(slideData, slideNumber) {
+                let title = slideData.title || 'Slide ' + slideNumber;
+                let description = slideData.description || 'Content ' + slideNumber;
+
+                // Limpieza básica de prefijos comunes
+                title = title.replace(/^(Título|Title|Titre|Titel):\s*/i, '').trim();
+                
+                const titleWords = title.split(' ');
+                if (titleWords.length > 6) {
+                    title = titleWords.slice(0, 6).join(' ') + '...';
+                }
+
+                description = description.replace(/^(Descripción|Description|Beschreibung):\s*/i, '').trim();
+                const descWords = description.split(' ');
+                if (descWords.length > 25) {
+                    description = descWords.slice(0, 25).join(' ') + '...';
+                }
+
+                return {
+                    title: title,
+                    description: description
+                };
+            }
+
+            // Generar contenido para la presentación usando la API de texto con lógica mejorada
+            async function generatePresentationContent(apiKey) {
+                presentationData.slides = [];
+                const t = translations[currentLang];
+                
+                // Obtener modelo seleccionado
+                const selectedLLM = document.getElementById('llmSelect').value;
+
+                // Array para almacenar títulos generados y evitar duplicados
+                const generatedTitles = [];
+
+                // Generar datos para cada diapositiva
+                for (let i = 0; i < presentationData.slideCount; i++) {
+                    let slideData = null;
+                    let attempts = 0;
+                    const maxAttempts = 3;
+
+                    // Determinar el tipo de diapositiva
+                    let slideInstruction = "";
+                    if (i === 0) {
+                        slideInstruction = t.slideTypeIntro;
+                    } else if (i === presentationData.slideCount - 1) {
+                        slideInstruction = t.slideTypeConclusion;
+                    } else {
+                        // Diapositivas intermedias: Forzar especificidad
+                        slideInstruction = `${t.slideTypeSpecific} (Slide ${i + 1}/${presentationData.slideCount})`;
+                    }
+
+                    // Construcción de la lista de evitación
+                    let avoidanceInstruction = "";
+                    if (generatedTitles.length > 0) {
+                        avoidanceInstruction = `${t.avoidRepetition} [${generatedTitles.join(', ')}].`;
+                    }
+
+                    // Construcción del prompt mejorado
+                    const systemPrompt = encodeURIComponent(t.aiSystemPrompt);
+                    const userPromptText = `${t.aiUserPromptBase} ${presentationData.topic}. ${t.aiUserPromptStructure} ${slideInstruction}. ${avoidanceInstruction} ${t.aiUserPromptFormat}`;
+                    const userPrompt = encodeURIComponent(userPromptText);
+
+                    while (attempts < maxAttempts && !slideData) {
+                        try {
+                            const randomSeed = Math.floor(Math.random() * 10000);
+                            const apiUrl = `https://enter.pollinations.ai/api/generate/text/${userPrompt}?key=${apiKey}&model=${selectedLLM}&system=${systemPrompt}&seed=${randomSeed}`;
+
+                            const response = await fetch(apiUrl);
+                            const textResponse = await response.text();
+
+                            const titleMatch = textResponse.match(/(?:Título|Title|Titre|Titel):\s*(.+)/i);
+                            const descMatch = textResponse.match(/(?:Descripción|Description|Beschreibung):\s*(.+)/i);
+
+                            if (titleMatch && descMatch) {
+                                slideData = {
+                                    title: titleMatch[1].trim(),
+                                    description: descMatch[1].trim()
+                                };
+                            } 
+                        } catch (error) {
+                            console.error('Error en intento ' + (attempts + 1) + ':', error);
+                        }
+
+                        attempts++;
+                        if (!slideData && attempts < maxAttempts) {
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                        }
+                    }
+
+                    if (!slideData) {
+                        slideData = {
+                            title: `${presentationData.topic} - Part ${i + 1}`,
+                            description: '...'
+                        };
+                    }
+
+                    // Guardar el título completo generado para evitar repetición en el futuro
+                    generatedTitles.push(slideData.title);
+
+                    slideData = validateAndTruncateContent(slideData, i + 1);
+
+                    const slide = {
+                        id: i + 1,
+                        title: slideData.title,
+                        description: slideData.description,
+                        seed: Math.floor(Math.random() * 49990) + 10,
+                        approved: false,
+                        imageBase64: null,
+                        currentImagePrompt: `${slideData.title}, ${presentationData.style} style, high quality`,
+                        imagePosition: presentationData.aspectRatio === 'vertical' ? (Math.random() > 0.5 ? 'top' : 'bottom') : 'right'
+                    };
+
+                    presentationData.slides.push(slide);
+                }
+
+                renderPreview();
+                
+                // Mostrar botón de descarga inmediatamente después de generar
+                downloadBtn.style.display = 'block';
+            }
+
+            // Convertir imagen a Base64
+            async function imageToBase64(url) {
+                try {
+                    const response = await fetch(url);
+                    const blob = await response.blob();
+                    return new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => resolve(reader.result);
+                        reader.onerror = reject;
+                        reader.readAsDataURL(blob);
+                    });
+                } catch (error) {
+                    console.error('Error convirtiendo imagen a Base64:', error);
+                    return 'https://via.placeholder.com/400x300?text=Error+de+carga';
+                }
+            }
+
+            // Regenerar imagen
+            function regenerateImage(slideId) {
+                const slide = presentationData.slides.find(s => s.id === slideId);
+                const t = translations[currentLang];
+                
+                if (slide) {
+                    const customPromptInput = document.getElementById('customPrompt-' + slideId);
+                    const customPrompt = customPromptInput ? customPromptInput.value.trim() : '';
+
+                    slide.seed = Math.floor(Math.random() * 49990) + 10;
+                    slide.approved = false; // Reset approval
+                    slide.imageBase64 = null; // Clear old base64
+
+                    if (customPrompt) {
+                        slide.currentImagePrompt = customPrompt;
+                    } else {
+                        slide.currentImagePrompt = `${slide.title}, ${presentationData.style} style, high quality`;
+                    }
+
+                    renderPreview();
+                    showNotification(t.notificationImgRegenerated);
+                }
+            }
+
+            // Aprobar imagen
+            async function approveImage(slideId) {
+                const slide = presentationData.slides.find(s => s.id === slideId);
+                const t = translations[currentLang];
+                const apiKey = apiKeyInput.value.trim();
+
+                if (!apiKey) {
+                    showNotification(t.notificationMissingKey, true);
+                    return;
+                }
+
+                if (slide && !slide.approved) {
+                    try {
+                        // Feedback visual mientras carga
+                        const btn = document.querySelector(`button[onclick="approveImage(${slideId})"]`);
+                        const originalContent = btn.innerHTML;
+                        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                        btn.disabled = true;
+
+                        const imageUrl = `https://enter.pollinations.ai/api/generate/image/${encodeURIComponent(slide.currentImagePrompt)}?key=${apiKey}&seed=${slide.seed}&model=${presentationData.imageModel}`;
+                        slide.imageBase64 = await imageToBase64(imageUrl);
+
+                        slide.approved = true;
+                        presentationData.approvedCount++;
+
+                        if (presentationData.approvedCount === presentationData.slideCount) {
+                            showNotification(t.notificationAllApproved);
+                        } else {
+                            showNotification(t.approvedLabel);
+                        }
+
+                        renderPreview();
+                    } catch (error) {
+                        console.error('Error aprobando imagen:', error);
+                        showNotification(t.notificationError, true);
+                        // Reset button if error
+                        renderPreview();
+                    }
+                }
+            }
+
+            // Renderizar vista previa
+            function renderPreview() {
+                let html = '';
+                const t = translations[currentLang];
+                const apiKey = apiKeyInput.value.trim();
+
+                presentationData.slides.forEach(slide => {
+                    // Si está aprobada usamos el base64, si no la URL
+                    const imageUrl = slide.approved && slide.imageBase64 
+                        ? slide.imageBase64 
+                        : `https://enter.pollinations.ai/api/generate/image/${encodeURIComponent(slide.currentImagePrompt)}?key=${apiKey}&seed=${slide.seed}&model=${presentationData.imageModel}`;
+
+                    const isVertical = presentationData.aspectRatio === 'vertical';
+                    const imageFirst = isVertical && slide.imagePosition === 'top';
+                    const originalPrompt = `${slide.title}, ${presentationData.style} style, high quality`;
+                    const isCustomPrompt = slide.currentImagePrompt !== originalPrompt;
+
+                    const imageElement = `
+                        <div class="slide-image">
+                            <img src="${imageUrl}" alt="${slide.title}" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x300?text=Error+de+imagen'">
+                            <div class="image-controls">
+                                ${!slide.approved ? `
+                                <input type="text" class="custom-prompt-input" id="customPrompt-${slide.id}" placeholder="${t.promptPlaceholder}" value="${isCustomPrompt ? slide.currentImagePrompt : ''}">
+                                <div class="image-buttons">
+                                    <button class="image-btn regenerate-btn" onclick="regenerateImage(${slide.id})">
+                                        <i class="fas fa-sync-alt"></i> ${t.regenerateBtn}
+                                    </button>
+                                    <button class="image-btn approve-btn" onclick="approveImage(${slide.id})">
+                                        <i class="fas fa-check"></i> ${t.approveBtn}
+                                    </button>
+                                </div>
+                                ` : `
+                                <span style="color:#2a9d8f;"><i class="fas fa-check-circle"></i> ${t.approvedLabel}</span>
+                                <button class="image-btn regenerate-btn" style="margin-top:10px; font-size:0.8rem; padding: 5px 10px;" onclick="regenerateImage(${slide.id})">
+                                    <i class="fas fa-undo"></i>
+                                </button>
+                                `}
+                            </div>
+                        </div>
+                    `;
+
+                    const textElement = `
+                        <div class="slide-text">
+                            <p>${slide.description}</p>
+                        </div>
+                    `;
+
+                    html += `
+                        <div class="slide-preview ${slide.approved ? 'slide-approved' : ''}">
+                            <div class="slide-header">
+                                <div class="slide-title">${slide.title}</div>
+                                <div class="slide-number">${t.slideLabel} ${slide.id}</div>
+                            </div>
+                            <div class="slide-content ${isVertical ? 'vertical' : ''}">
+                                ${imageFirst ? imageElement + textElement : textElement + imageElement}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                previewContent.innerHTML = html;
+            }
+
+            // Descargar presentación HTML - Modificado para manejar conversión a Base64
+            downloadBtn.addEventListener('click', async function () {
+                const t = translations[currentLang];
+                const btnTextSpan = document.getElementById('btnDownload');
+                const originalText = btnTextSpan.textContent;
+                const btnIcon = this.querySelector('i');
+                const originalIconClass = btnIcon.className;
+
+                // UI Feedback
+                this.disabled = true;
+                btnTextSpan.textContent = t.processingImages;
+                btnIcon.className = "fas fa-spinner fa-spin";
+
+                try {
+                    const apiKey = apiKeyInput.value.trim();
+
+                    // Convertir imágenes no aprobadas a Base64 en paralelo
+                    const conversionPromises = presentationData.slides.map(async (slide) => {
+                        // Si no tiene base64 (no aprobada o recién regenerada), la convertimos ahora
+                        if (!slide.imageBase64) {
+                            const imageUrl = `https://enter.pollinations.ai/api/generate/image/${encodeURIComponent(slide.currentImagePrompt)}?key=${apiKey}&seed=${slide.seed}&model=${presentationData.imageModel}`;
+                            slide.imageBase64 = await imageToBase64(imageUrl);
+                            // La marcamos como aprobada para la UI (opcional, pero consistente)
+                            slide.approved = true;
+                        }
+                    });
+
+                    // Esperar a que todas las imágenes se conviertan
+                    await Promise.all(conversionPromises);
+
+                    // Actualizar la vista previa para reflejar que ahora son seguras/aprobadas
+                    renderPreview();
+                    presentationData.approvedCount = presentationData.slideCount;
+
+                    // Generar y descargar el archivo
+                    downloadPresentation();
+                    showNotification(t.notificationDownloadSuccess);
+
+                } catch (error) {
+                    console.error("Error convirtiendo imágenes para descarga:", error);
+                    showNotification(t.notificationError, true);
+                } finally {
+                    // Restaurar botón
+                    this.disabled = false;
+                    btnTextSpan.textContent = originalText;
+                    btnIcon.className = originalIconClass;
+                }
+            });
+
+            // Generar y descargar el HTML de la presentación
+            function downloadPresentation() {
+                const isVertical = presentationData.aspectRatio === 'vertical';
+                const t = translations[currentLang];
+
+                let htmlContent = `<!DOCTYPE html><html lang="${currentLang}"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${presentationData.topic} - Presentation</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"><style>`;
+
+                // CSS base
+                htmlContent += 'body{margin:0;padding:0;font-family:system-ui,-apple-system,sans-serif;background:#1a1a1a;color:white;overflow:hidden}';
+                htmlContent += '#presentation{width:100vw;height:100vh;position:relative}';
+                htmlContent += '.slide{position:absolute;width:100%;height:100%;display:none;padding:2rem;box-sizing:border-box;overflow-y:auto}';
+                htmlContent += '.slide.active{display:flex;flex-direction:column}';
+
+                // CSS específico
+                if (isVertical) {
+                    htmlContent += '.content{display:flex;flex-direction:column;gap:1.5rem;height:calc(100vh - 4rem);max-width:800px;margin:0 auto;justify-content:space-evenly;align-items:center;padding:1rem 0}';
+                    htmlContent += '.text-content{flex:0 1 auto;padding:1rem 2rem;text-align:center;max-width:100%}';
+                    htmlContent += '.text-content h1{font-size:clamp(1.5rem,4vw,2.5rem);margin-bottom:1rem;line-height:1.2}';
+                    htmlContent += '.text-content p{font-size:clamp(1rem,2.5vw,1.3rem);line-height:1.5;margin:0}';
+                    htmlContent += '.image-content{flex:0 1 auto;display:flex;align-items:center;justify-content:center;width:100%;max-height:50vh}';
+                    htmlContent += '.image-content img{width:auto;max-width:90%;height:auto;max-height:45vh;object-fit:contain;border-radius:8px}';
+                } else {
+                    htmlContent += '.content{display:flex;gap:2rem;height:100%;max-width:1200px;margin:0 auto;align-items:center}';
+                    htmlContent += '.text-content{flex:1;padding:2rem}';
+                    htmlContent += '.text-content h1{font-size:2.5rem;margin-bottom:2rem}';
+                    htmlContent += '.text-content p{font-size:1.2rem;line-height:1.6}';
+                    htmlContent += '.image-content{flex:1;display:flex;align-items:center;justify-content:center}';
+                    htmlContent += '.image-content img{width:90%;height:auto;max-height:65vh;object-fit:contain;border-radius:8px}';
+                }
+
+                // CSS común y controles
+                htmlContent += '.controls{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);display:flex;gap:1rem;align-items:center;background:rgba(0,0,0,0.7);padding:1rem;border-radius:8px;z-index:1000}';
+                htmlContent += 'button{padding:0.5rem 1rem;border:none;background:#3b82f6;color:white;border-radius:4px;cursor:pointer}';
+                htmlContent += 'button:hover{background:#2563eb}';
+                htmlContent += 'button:disabled{background:#6b7280;cursor:not-allowed}';
+                htmlContent += '.progress{position:fixed;bottom:0;left:0;height:5px;background:#4CAF50;transition:width 0.3s}';
+
+                // Media queries
+                if (isVertical) {
+                    htmlContent += '@media (max-height:600px){.content{gap:1rem;justify-content:center}.text-content{padding:0.5rem 1rem}.text-content h1{font-size:clamp(1.2rem,3vw,1.8rem);margin-bottom:0.5rem}.text-content p{font-size:clamp(0.9rem,2vw,1.1rem)}.image-content{max-height:35vh}.image-content img{max-height:30vh}}';
+                    htmlContent += '@media (max-width:768px){.content{padding:0.5rem;gap:1rem}.text-content{padding:0.5rem 1rem}.image-content img{max-width:95%;max-height:35vh}}';
+                    htmlContent += '@media (max-width:480px){.slide{padding:1rem}.content{gap:0.5rem}.text-content h1{font-size:clamp(1rem,4vw,1.5rem)}.text-content p{font-size:clamp(0.8rem,3vw,1rem)}.image-content img{max-height:30vh}}';
+                } else {
+                    htmlContent += '@media (max-width:768px){.content{flex-direction:column;padding-top:2rem}.text-content,.image-content{padding:1rem}.image-content img{max-height:40vh;max-width:90%}}';
+                }
+
+                htmlContent += '</style></head><body><div id="presentation">';
+
+                presentationData.slides.forEach((slide, index) => {
+                    // AHORA USAMOS SOLO EL BASE64 YA GARANTIZADO POR EL EVENTO CLICK
+                    // Esto evita poner la API key en el HTML final
+                    const imageSrc = slide.imageBase64 || 'https://via.placeholder.com/400x300?text=Imagen+No+Disponible';
+                    
+                    const imageFirst = isVertical && slide.imagePosition === 'top';
+                    const imageElement = `<div class="image-content"><img src="${imageSrc}" alt="${slide.title}" class="animate__animated"></div>`;
+                    const textElement = `<div class="text-content animate__animated"><h1 class="animate__animated">${slide.title}</h1><p class="animate__animated">${slide.description}</p></div>`;
+                    htmlContent += `<div class="slide" id="slide-${index + 1}"><div class="content">${imageFirst ? imageElement + textElement : textElement + imageElement}</div></div>`;
+                });
+
+                htmlContent += `</div><div class="controls"><button id="prevBtn" disabled>${t.downloadPrev}</button><span id="slideCounter">1/${presentationData.slides.length}</span><button id="nextBtn">${t.downloadNext}</button></div><div class="progress"></div>`;
+
+                htmlContent += '<script>';
+                htmlContent += 'const transitionEffects={rotate:\"animate__rotateIn\",flip:\"animate__flipInX\",zoom:\"animate__zoomIn\",slideRight:\"animate__slideInRight\",fadeIn:\"animate__fadeIn\"};';
+                htmlContent += `let currentSlide=1;const totalSlides=${presentationData.slides.length};`;
+                htmlContent += 'const slides=document.querySelectorAll(\".slide\");';
+                htmlContent += 'const prevBtn=document.getElementById(\"prevBtn\");';
+                htmlContent += 'const nextBtn=document.getElementById(\"nextBtn\");';
+                htmlContent += 'const slideCounter=document.getElementById(\"slideCounter\");';
+                htmlContent += 'function showSlide(n){slides.forEach(slide=>slide.classList.remove(\"active\"));';
+                htmlContent += 'const slideToShow=slides[n-1];slideToShow.classList.add(\"active\");';
+                htmlContent += 'const elements=slideToShow.querySelectorAll(\".animate__animated\");';
+                htmlContent += 'elements.forEach(element=>{element.classList.forEach(cls=>{if(cls.startsWith(\"animate__\")){element.classList.remove(cls)}});';
+                htmlContent += 'void element.offsetWidth;const randomEffect=Object.values(transitionEffects)[Math.floor(Math.random()*Object.values(transitionEffects).length)];';
+                htmlContent += 'element.classList.add(\"animate__animated\",randomEffect)});';
+                htmlContent += 'currentSlide=n;slideCounter.textContent=currentSlide+\"/\"+totalSlides;';
+                htmlContent += 'prevBtn.disabled=currentSlide===1;nextBtn.disabled=currentSlide===totalSlides;';
+                htmlContent += 'document.querySelector(\".progress\").style.width=(currentSlide/totalSlides*100)+\"%\"}';
+                htmlContent += 'prevBtn.addEventListener(\"click\",()=>{if(currentSlide>1)showSlide(currentSlide-1)});';
+                htmlContent += 'nextBtn.addEventListener(\"click\",()=>{if(currentSlide<totalSlides)showSlide(currentSlide+1)});';
+                htmlContent += 'document.addEventListener(\"keydown\",(e)=>{if(e.key===\"ArrowLeft\"&&currentSlide>1)showSlide(currentSlide-1);';
+                htmlContent += 'if(e.key===\"ArrowRight\"&&currentSlide<totalSlides)showSlide(currentSlide+1)});';
+                htmlContent += 'showSlide(1);<\/script></body></html>';
+
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `presentation-${presentationData.topic.replace(/\s+/g, '-').toLowerCase()}.html`;
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 100);
+            }
+
+            // Hacer funciones accesibles globalmente
+            window.regenerateImage = regenerateImage;
+            window.approveImage = approveImage;
+        });
+    </script>
+</body>
+
+</html>
